@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "149588217269",
+    "project_id": "mendozaexplorer-8be75",
+    "storage_bucket": "mendozaexplorer-8be75.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149588217269:android:b4f18953536af03bbeddfc",
+        "android_client_info": {
+          "package_name": "com.example.home_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFBfF44tBb3hSk12eq5Ya82q9dwsyl2DI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:149588217269:android:584ae5329024d907beddfc",
+        "android_client_info": {
+          "package_name": "com.mendoza.explorer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFBfF44tBb3hSk12eq5Ya82q9dwsyl2DI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
