@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../bodegas_screen/bodegas_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -58,7 +59,8 @@ class HomeScreen extends StatelessWidget {
                               return Container(
                                 color: Colors.grey[300],
                                 child: const Center(
-                                  child: Icon(Icons.landscape, size: 60, color: Colors.grey),
+                                  child: Icon(Icons.landscape, size: 60,
+                                      color: Colors.grey),
                                 ),
                               );
                             },
@@ -173,14 +175,16 @@ class HomeScreen extends StatelessWidget {
         ),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 12.0),
+            padding: const EdgeInsets.symmetric(
+                horizontal: 40.0, vertical: 12.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildNavItem(Icons.home, true),
-                _buildNavItem(Icons.search, false),
-                _buildNavItem(Icons.favorite_border, false),
-                _buildNavItem(Icons.person_outline, false),
+                _buildNavItem(Icons.home, true, context),
+                _buildNavItem(Icons.search, false, context),
+                _buildNavItem(Icons.grid_view, false, context),
+                _buildNavItem(Icons.favorite_border, false, context),
+                _buildNavItem(Icons.person_outline, false, context),
               ],
             ),
           ),
@@ -275,17 +279,27 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItem(IconData icon, bool isActive) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: isActive ? const Color(0xFF4A3428) : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Icon(
-        icon,
-        color: isActive ? Colors.white : const Color(0xFF4A3428),
-        size: 26,
+  Widget _buildNavItem(IconData icon, bool isActive, BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        if (icon == Icons.grid_view && !isActive) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const BodegasScreen()),
+          );
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: isActive ? const Color(0xFF4A3428) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          icon,
+          color: isActive ? Colors.white : const Color(0xFF4A3428),
+          size: 26,
+        ),
       ),
     );
   }
