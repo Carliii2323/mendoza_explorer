@@ -3,6 +3,7 @@ import '../presentation/screens/login_screen/login_screen.dart';
 import '../presentation/screens/register_screen/register_screen.dart';
 import '../presentation/screens/welcome_screen/welcome_screen.dart';
 import '../presentation/screens/home_screen/home_screen.dart';
+import '../presentation/screens/user_screen/user_screen.dart';
 
 class AppRoutes {
   static const String homeScreen = '/home_screen';
@@ -10,6 +11,7 @@ class AppRoutes {
   static const String initialRoute = '/';
   static const String registerScreen = '/presentation/screens/register_screen';
   static const String welcomeScreen = '/welcome_screen';
+  static const String userScreen = '/user_screen';
 
   static Map<String, WidgetBuilder> get routes => {
     homeScreen: (context) => const HomeScreen(),
@@ -17,5 +19,6 @@ class AppRoutes {
     initialRoute: (context) => WelcomeScreen(),
     registerScreen: (context) => RegisterScreen(),
     welcomeScreen: (context) => const WelcomeScreen(),
+    userScreen: (context) => const UserScreen(),
   };
 }

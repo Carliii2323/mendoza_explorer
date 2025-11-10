@@ -181,7 +181,7 @@ class AuthService {
       case 'network-request-failed':
         return 'Error de conexión. Verifica tu internet';
       default:
-        return 'Error de autenticación: ${e.message}';
+        return 'Error de autenticación: La combinación de correo electrónico y contraseña es incorrecta.';
     }
   }
 }

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:mendoza_explorer/presentation/screens/home_screen/home_screen.dart';
+import 'package:mendoza_explorer/presentation/screens/user_screen/user_screen.dart';
 
 class BodegasScreen extends StatefulWidget {
   const BodegasScreen({Key? key}) : super(key: key);
@@ -8,7 +11,9 @@ class BodegasScreen extends StatefulWidget {
 }
 
 class _BodegasScreenState extends State<BodegasScreen> {
-  int _selectedIndex = 2; // Index para el navbar (2 = grid_view)
+  int _selectedIndex = 2; // Index para el navbar (2 = wine_glass)
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
 
   final List<Bodega> bodegas = [
     Bodega(
@@ -49,6 +54,26 @@ class _BodegasScreenState extends State<BodegasScreen> {
     ),
   ];
 
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  // Filtrar bodegas según búsqueda
+  List<Bodega> get bodegasFiltradas {
+    if (_searchQuery.isEmpty) {
+      return bodegas;
+    }
+    return bodegas.where((bodega) {
+      final nombreLower = bodega.nombre.toLowerCase();
+      final ubicacionLower = bodega.ubicacion.toLowerCase();
+      final queryLower = _searchQuery.toLowerCase();
+      return nombreLower.contains(queryLower) ||
+          ubicacionLower.contains(queryLower);
+    }).toList();
+  }
+
   void _onNavItemTapped(int index) {
     if (index == _selectedIndex) return;
 
@@ -59,7 +84,8 @@ class _BodegasScreenState extends State<BodegasScreen> {
     // Navegación según el índice
     switch (index) {
       case 0: // Home
-        Navigator.pop(context);
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
         break;
       case 1: // Search
       // TODO: Navegar a pantalla de búsqueda
@@ -71,7 +97,8 @@ class _BodegasScreenState extends State<BodegasScreen> {
       // TODO: Navegar a pantalla de favoritos
         break;
       case 4: // Perfil
-      // TODO: Navegar a pantalla de perfil
+        Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const UserScreen()));
         break;
     }
   }
@@ -84,6 +111,8 @@ class _BodegasScreenState extends State<BodegasScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final bodegasParaMostrar = bodegasFiltradas;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF5F1E8),
       body: SafeArea(
@@ -99,18 +128,131 @@ class _BodegasScreenState extends State<BodegasScreen> {
                 'Bodegas',
                 style: TextStyle(
                   fontSize: 28,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w600,
                   fontFamily: 'Poppins',
                   color: Color(0xFF2C2C2C),
                 ),
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 20),
+
+            // Barra de búsqueda
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: const Color(0xFFE0E0E0), width: 1),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 16,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: 'Buscar bodegas...',
+                    hintStyle: const TextStyle(
+                      color: Color(0xFF999999),
+                      fontSize: 16,
+                    ),
+                    prefixIcon: const Icon(
+                      Icons.search,
+                      color: Color(0xFF4A3428),
+                      size: 24,
+                    ),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                      icon: const Icon(
+                        Icons.clear,
+                        color: Color(0xFF999999),
+                        size: 22,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _searchController.clear();
+                          _searchQuery = '';
+                        });
+                      },
+                    )
+                        : null,
+                    border: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            // Contador de resultados
+            if (_searchQuery.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Text(
+                  bodegasParaMostrar.isEmpty
+                      ? 'No se encontraron resultados'
+                      : '${bodegasParaMostrar.length} bodega${bodegasParaMostrar.length != 1 ? 's' : ''} encontrada${bodegasParaMostrar.length != 1 ? 's' : ''}',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+              ),
+
+            if (_searchQuery.isNotEmpty) const SizedBox(height: 10),
 
             // Grid de bodegas
             Expanded(
-              child: Padding(
+              child: bodegasParaMostrar.isEmpty
+                  ? Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.search_off,
+                      size: 80,
+                      color: Colors.grey[400],
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'No se encontraron bodegas',
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.grey[600],
+                        fontFamily: 'Poppins',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Intenta con otro término de búsqueda',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[500],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+                  : Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -119,9 +261,10 @@ class _BodegasScreenState extends State<BodegasScreen> {
                     mainAxisSpacing: 16,
                     childAspectRatio: 0.75,
                   ),
-                  itemCount: bodegas.length,
+                  itemCount: bodegasParaMostrar.length,
                   itemBuilder: (context, index) {
-                    return _buildBodegaCard(bodegas[index], index);
+                    final bodegaIndex = bodegas.indexOf(bodegasParaMostrar[index]);
+                    return _buildBodegaCard(bodegasParaMostrar[index], bodegaIndex);
                   },
                 ),
               ),
@@ -151,8 +294,8 @@ class _BodegasScreenState extends State<BodegasScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildNavItem(Icons.home, 0),
-                _buildNavItem(Icons.search, 1),
-                _buildNavItem(Icons.grid_view, 2),
+                _buildNavItem(FontAwesomeIcons.ticket, 1),
+                _buildNavItem(Icons.wine_bar, 2),
                 _buildNavItem(Icons.favorite_border, 3),
                 _buildNavItem(Icons.person_outline, 4),
               ],
@@ -164,120 +307,132 @@ class _BodegasScreenState extends State<BodegasScreen> {
   }
 
   Widget _buildBodegaCard(Bodega bodega, int index) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
+    return GestureDetector(
+      onTap: () {
+        // TODO: Navegar a detalle de bodega
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Abriendo: ${bodega.nombre}'),
+            backgroundColor: const Color(0xFF4A3428),
+            duration: const Duration(seconds: 1),
           ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
-        child: Stack(
-          children: [
-            // Imagen de fondo
-            Positioned.fill(
-              child: Image.asset(
-                bodega.imagen,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return _buildPlaceholderImage(index);
-                },
-              ),
+        );
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(16),
+          child: Stack(
+            children: [
+              // Imagen de fondo
+              Positioned.fill(
+                child: Image.asset(
+                  bodega.imagen,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return _buildPlaceholderImage(index);
+                  },
+                ),
+              ),
 
-            // Overlay oscuro en la parte inferior
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withOpacity(0.7),
+              // Overlay oscuro en la parte inferior
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.transparent,
+                        Colors.black.withOpacity(0.7),
+                      ],
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        bodega.nombre,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          fontFamily: 'Poppins',
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            size: 12,
+                            color: Colors.white70,
+                          ),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              bodega.ubicacion,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.white70,
+                                fontFamily: 'Poppins',
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      bodega.nombre,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
-                        fontFamily: 'Poppins',
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          size: 12,
-                          color: Colors.white70,
-                        ),
-                        const SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            bodega.ubicacion,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              color: Colors.white70,
-                              fontFamily: 'Poppins',
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+              ),
+
+              // Botón de favorito
+              Positioned(
+                top: 8,
+                right: 8,
+                child: GestureDetector(
+                  onTap: () => _toggleFavorito(index),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.9),
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ),
-            ),
-
-            // Botón de favorito
-            Positioned(
-              top: 8,
-              right: 8,
-              child: GestureDetector(
-                onTap: () => _toggleFavorito(index),
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
-                    shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Icon(
-                    bodega.isFavorito ? Icons.favorite : Icons.favorite_border,
-                    color: bodega.isFavorito ? Colors.red : const Color(0xFF4A3428),
-                    size: 20,
+                    child: Icon(
+                      bodega.isFavorito ? Icons.favorite : Icons.favorite_border,
+                      color: bodega.isFavorito ? Colors.red : const Color(0xFF4A3428),
+                      size: 20,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
