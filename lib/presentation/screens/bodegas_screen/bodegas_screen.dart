@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mendoza_explorer/presentation/screens/home_screen/home_screen.dart';
 import 'package:mendoza_explorer/presentation/screens/user_screen/user_screen.dart';
+import 'package:mendoza_explorer/presentation/screens/bodega_detail_screen/bodega_detail_screen.dart'; // IMPORTA LA NUEVA PANTALLA
 
 class BodegasScreen extends StatefulWidget {
   const BodegasScreen({Key? key}) : super(key: key);
@@ -11,7 +12,7 @@ class BodegasScreen extends StatefulWidget {
 }
 
 class _BodegasScreenState extends State<BodegasScreen> {
-  int _selectedIndex = 2; // Index para el navbar (2 = wine_glass)
+  int _selectedIndex = 2;
   final TextEditingController _searchController = TextEditingController();
   String _searchQuery = '';
 
@@ -60,7 +61,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
     super.dispose();
   }
 
-  // Filtrar bodegas según búsqueda
   List<Bodega> get bodegasFiltradas {
     if (_searchQuery.isEmpty) {
       return bodegas;
@@ -81,24 +81,23 @@ class _BodegasScreenState extends State<BodegasScreen> {
       _selectedIndex = index;
     });
 
-    // Navegación según el índice
     switch (index) {
-      case 0: // Home
+      case 0:
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => const HomeScreen()));
         break;
-      case 1: // Search
+      case 1:
       // TODO: Navegar a pantalla de búsqueda
         break;
-      case 2: // Grid (Bodegas)
+      case 2:
       // Ya estamos aquí
         break;
-      case 3: // Favoritos
+      case 3:
       // TODO: Navegar a pantalla de favoritos
         break;
-      case 4: // Perfil
+      case 4:
         Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const UserScreen()));
+            MaterialPageRoute(builder: (context) => const UserScreen()));
         break;
     }
   }
@@ -106,6 +105,24 @@ class _BodegasScreenState extends State<BodegasScreen> {
   void _toggleFavorito(int index) {
     setState(() {
       bodegas[index].isFavorito = !bodegas[index].isFavorito;
+    });
+  }
+
+  // NUEVA FUNCIÓN: Navegar a detalle de bodega
+  void _navigateToDetail(Bodega bodega) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => BodegaDetailScreen(
+          nombre: bodega.nombre,
+          ubicacion: bodega.ubicacion,
+          imagen: bodega.imagen,
+          isFavorito: bodega.isFavorito,
+        ),
+      ),
+    ).then((_) {
+      // Cuando regrese de la pantalla de detalle, actualiza el estado si es necesario
+      setState(() {});
     });
   }
 
@@ -121,7 +138,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
           children: [
             const SizedBox(height: 20),
 
-            // Título "Bodegas"
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 24.0),
               child: Text(
@@ -137,7 +153,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
 
             const SizedBox(height: 20),
 
-            // Barra de búsqueda
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Container(
@@ -202,7 +217,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
 
             const SizedBox(height: 20),
 
-            // Contador de resultados
             if (_searchQuery.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -220,7 +234,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
 
             if (_searchQuery.isNotEmpty) const SizedBox(height: 10),
 
-            // Grid de bodegas
             Expanded(
               child: bodegasParaMostrar.isEmpty
                   ? Center(
@@ -275,7 +288,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
         ),
       ),
 
-      // Bottom Navigation Bar
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: const Color(0xFFF5F1E8),
@@ -308,16 +320,7 @@ class _BodegasScreenState extends State<BodegasScreen> {
 
   Widget _buildBodegaCard(Bodega bodega, int index) {
     return GestureDetector(
-      onTap: () {
-        // TODO: Navegar a detalle de bodega
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Abriendo: ${bodega.nombre}'),
-            backgroundColor: const Color(0xFF4A3428),
-            duration: const Duration(seconds: 1),
-          ),
-        );
-      },
+      onTap: () => _navigateToDetail(bodega), // ACTUALIZADO: Llama a la nueva función
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -333,7 +336,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
           borderRadius: BorderRadius.circular(16),
           child: Stack(
             children: [
-              // Imagen de fondo
               Positioned.fill(
                 child: Image.asset(
                   bodega.imagen,
@@ -344,7 +346,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
                 ),
               ),
 
-              // Overlay oscuro en la parte inferior
               Positioned(
                 bottom: 0,
                 left: 0,
@@ -404,7 +405,6 @@ class _BodegasScreenState extends State<BodegasScreen> {
                 ),
               ),
 
-              // Botón de favorito
               Positioned(
                 top: 8,
                 right: 8,
