@@ -37,23 +37,15 @@ class UserScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'MENDOZA',
+                          'MendoWines',
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 20,
                             fontWeight: FontWeight.w700,
                             color: Color(0xFF4A3428),
-                            letterSpacing: 1.2,
+                            letterSpacing: 1.1,
                           ),
                         ),
-                        Text(
-                          'EXPLORER',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFF4A3428),
-                            letterSpacing: 1.2,
-                          ),
-                        ),
+
                       ],
                     ),
 
@@ -412,7 +404,7 @@ class UserScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const BodegasScreen())
                 );
               }),
-              _buildNavItem(Icons.favorite_border, false, null),
+              _buildNavItem(Icons.location_on, false, null),
               _buildNavItem(Icons.person, true, null),
             ],
           ),

@@ -78,10 +78,10 @@ class HomeScreen extends StatelessWidget {
 
                     // Texto "MENDOZA EXPLORER" sobre la imagen
                     const Positioned(
-                      left: 75,
+                      left: 120,
                       bottom: 110,
                       child: Text(
-                        'MENDOZA EXPLORER',
+                        'MendoWines',
                         style: TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.w800,
@@ -265,7 +265,7 @@ class HomeScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const BodegasScreen())
                   );
                 }),
-                _buildNavItem(Icons.favorite_border, false, context, null),
+                _buildNavItem(Icons.location_on, false, context, null),
                 _buildNavItem(Icons.person_outline, false, context, () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const UserScreen()));

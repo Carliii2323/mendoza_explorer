@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../reserva_screen/ReservaScreen.dart';
+import 'BodegaFullInfoScreen.dart';
 
 class BodegaDetailScreen extends StatefulWidget {
   final String nombre;
@@ -373,6 +375,47 @@ class _BodegaDetailScreenState extends State<BodegaDetailScreen> {
                     ),
                   ),
 
+                  // Botón Mostrar más
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BodegaFullInfoScreen(
+                              nombre: widget.nombre,
+                              ubicacion: widget.ubicacion,
+                              imagen: widget.imagen,
+                            ),
+                          ),
+                        );
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 32,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          side: BorderSide(
+                            color: Colors.grey[300]!,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      child: const Text(
+                        'Mostrar más',
+                        style: TextStyle(
+                          color: Color(0xFF4A3428),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 15,
+                          fontFamily: 'Poppins',
+                        ),
+                      ),
+                    ),
+                  ),
+
                   const SizedBox(height: 24),
 
                   // Mapa
@@ -483,11 +526,13 @@ class _BodegaDetailScreenState extends State<BodegaDetailScreen> {
         child: SafeArea(
           child: ElevatedButton(
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Reservando experiencia en ${widget.nombre}...'),
-                  backgroundColor: const Color(0xFF4A3428),
-                  duration: const Duration(seconds: 2),
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReservaScreen(
+                    nombreBodega: widget.nombre,
+                    ubicacion: widget.ubicacion,
+                  ),
                 ),
               );
             },

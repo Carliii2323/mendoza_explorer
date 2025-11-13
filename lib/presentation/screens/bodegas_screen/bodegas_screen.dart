@@ -308,7 +308,7 @@ class _BodegasScreenState extends State<BodegasScreen> {
                 _buildNavItem(Icons.home, 0),
                 _buildNavItem(FontAwesomeIcons.ticket, 1),
                 _buildNavItem(Icons.wine_bar, 2),
-                _buildNavItem(Icons.favorite_border, 3),
+                _buildNavItem(Icons.location_on, 3),
                 _buildNavItem(Icons.person_outline, 4),
               ],
             ),
