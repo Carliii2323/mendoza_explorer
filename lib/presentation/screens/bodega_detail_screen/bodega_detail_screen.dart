@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:google_maps_flutter_android/google_maps_flutter_android.dart';
 import '../reserva_screen/ReservaScreen.dart';
 import 'BodegaFullInfoScreen.dart';
 
@@ -448,30 +450,24 @@ class _BodegaDetailScreenState extends State<BodegaDetailScreen> {
                             borderRadius: BorderRadius.circular(16),
                             child: Stack(
                               children: [
-                                Container(
-                                  color: const Color(0xFFE8DCC8),
-                                  child: Center(
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.map,
-                                          size: 60,
-                                          color: const Color(0xFF4A3428).withOpacity(0.5),
-                                        ),
-                                        const SizedBox(height: 12),
-                                        Text(
-                                          widget.ubicacion,
-                                          style: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontSize: 14,
-                                            fontFamily: 'Poppins',
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                GoogleMap(
+                                  initialCameraPosition: CameraPosition(
+                                    target: LatLng(-33.08338, -68.47312), // coordenadas de san martin mendoza
+                                    zoom: 14,
                                   ),
+                                  markers: {
+                                    Marker(
+                                      markerId: const MarkerId('ubicacion'),
+                                      position: LatLng(-33.08338, -68.47312), // Mismas coordenadas
+                                      infoWindow: InfoWindow(
+                                        title: widget.ubicacion,
+                                      ),
+                                    ),
+                                  },
+                                  zoomControlsEnabled: false,
+                                  myLocationButtonEnabled: false,
                                 ),
+
                                 Positioned(
                                   bottom: 12,
                                   right: 12,

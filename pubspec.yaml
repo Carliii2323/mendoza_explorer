@@ -18,6 +18,7 @@ dependencies:
   shared_preferences: ^2.3.3
   connectivity_plus: ^7.0.0
   gradient_borders: ^1.0.2
+  google_maps_flutter: ^2.14.0 #dependencia de google_maps_flutter
   web: any
 dev_dependencies:
   flutter_test:    # 🚨 CRITICAL: Required for Flutter project testing - DO NOT REMOVE

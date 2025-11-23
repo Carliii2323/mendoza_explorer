@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mendoza_explorer/presentation/screens/listado_reservas_screen/listado_reservas_screen.dart';
+import 'package:mendoza_explorer/presentation/screens/map_screen/map_screen.dart';
 import 'package:mendoza_explorer/presentation/screens/user_screen/user_screen.dart';
 import '../bodegas_screen/bodegas_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -258,14 +260,28 @@ class HomeScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildNavItem(Icons.home, true, context, null),
-                _buildNavItem(FontAwesomeIcons.ticket, false, context, null),
+                _buildNavItem(FontAwesomeIcons.ticket, false, context, ()
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ListadoReservasScreen())
+                  );
+                }
+                ),
                 _buildNavItem(Icons.wine_bar, false, context, () {
                   Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const BodegasScreen())
+                      context,
+                      MaterialPageRoute(builder: (context) => const BodegasScreen())
                   );
                 }),
-                _buildNavItem(Icons.location_on, false, context, null),
+                _buildNavItem(Icons.location_on, false, context, ()
+                {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const MapScreen())
+                  );
+                }
+                ),
                 _buildNavItem(Icons.person_outline, false, context, () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => const UserScreen()));

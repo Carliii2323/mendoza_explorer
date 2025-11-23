@@ -1,8 +1,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Permisos necesarios para mapas -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
     <application
         android:label="home_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <!-- API KEY = Android key (auto created by Firebase) -->
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDngSLfXzyOWo9ulN7DroysT1Pl7It0__g"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -30,6 +41,7 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

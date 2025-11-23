@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mendoza_explorer/presentation/screens/home_screen/home_screen.dart';
 import 'package:mendoza_explorer/presentation/screens/user_screen/user_screen.dart';
-import 'package:mendoza_explorer/presentation/screens/bodega_detail_screen/bodega_detail_screen.dart'; // IMPORTA LA NUEVA PANTALLA
+import 'package:mendoza_explorer/presentation/screens/bodega_detail_screen/bodega_detail_screen.dart';
 
+import '../map_screen/map_screen.dart'; // IMPORTA LA NUEVA PANTALLA
+import '../listado_reservas_screen/listado_reservas_screen.dart';
 class BodegasScreen extends StatefulWidget {
   const BodegasScreen({Key? key}) : super(key: key);
 
@@ -87,13 +89,17 @@ class _BodegasScreenState extends State<BodegasScreen> {
             MaterialPageRoute(builder: (context) => const HomeScreen()));
         break;
       case 1:
-      // TODO: Navegar a pantalla de búsqueda
+      // TODO: Navegar a pantalla de reservas
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const ListadoReservasScreen()));
         break;
       case 2:
       // Ya estamos aquí
         break;
       case 3:
-      // TODO: Navegar a pantalla de favoritos
+      // TODO: Navegar a pantalla de mapa
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const MapScreen()));
         break;
       case 4:
         Navigator.push(context,

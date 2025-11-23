@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mendoza_explorer/presentation/screens/home_screen/home_screen.dart';
+import 'package:mendoza_explorer/presentation/screens/listado_reservas_screen/listado_reservas_screen.dart';
 import 'package:provider/provider.dart';
 import '../../../providers/auth_provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../bodegas_screen/bodegas_screen.dart';
+import '../map_screen/map_screen.dart';
 
 class UserScreen extends StatelessWidget {
   const UserScreen({super.key});
@@ -397,14 +399,25 @@ class UserScreen extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => const HomeScreen())
                 );
               }),
-              _buildNavItem(Icons.search, false, null),
+              //_buildNavItem(Icons.search, false, null),
+              _buildNavItem(FontAwesomeIcons.ticket, false, (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ListadoReservasScreen())
+                );
+              }
+              ),
               _buildNavItem(Icons.wine_bar, false, () {
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const BodegasScreen())
                 );
               }),
-              _buildNavItem(Icons.location_on, false, null),
+              _buildNavItem(Icons.location_on, false, (){
+                Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => const MapScreen())
+                );
+              }),
               _buildNavItem(Icons.person, true, null),
             ],
           ),
